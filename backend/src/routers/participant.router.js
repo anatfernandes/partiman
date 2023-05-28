@@ -5,6 +5,8 @@ import { participantController } from "../controllers/participant.controller.js"
 
 const participantRouter = Router();
 
-participantRouter.post("/", validateBody(participantSchemas.upsert), participantController.upsert);
+participantRouter
+  .post("/", validateBody(participantSchemas.upsert), participantController.upsert)
+  .get("/", participantController.list);
 
 export { participantRouter };

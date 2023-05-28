@@ -18,6 +18,10 @@ function findByCredentials(firstname, lastname) {
   return db.collection(MONGO_COLLECTIONS_ENUM.PARTICIPANTS).findOne({ firstname, lastname });
 }
 
+function findAll() {
+  return db.collection(MONGO_COLLECTIONS_ENUM.PARTICIPANTS).find().sort({ participation: -1 }).toArray();
+}
+
 function upsert(data, existingParticipant) {
   return db.collection(MONGO_COLLECTIONS_ENUM.PARTICIPANTS).findOneAndUpdate(
     existingParticipant,
@@ -28,6 +32,6 @@ function upsert(data, existingParticipant) {
   );
 }
 
-const participantRepository = { sumTotal, findByCredentials, upsert };
+const participantRepository = { sumTotal, findByCredentials, findAll, upsert };
 
 export { participantRepository };
