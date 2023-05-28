@@ -1,5 +1,13 @@
+import { GlobalStyle } from "../../assets/styles/globalStyle";
+
 function App() {
-	return <p>project initialized</p>;
+	return (
+		<>
+			<GlobalStyle />
+
+			<p>project initialized</p>
+		</>
+	);
 }
 
 export default App;
