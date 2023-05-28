@@ -7,9 +7,9 @@
   "scripts": {
     "start": "NODE_ENV=production node ./src/server.js",
     "dev": "NODE_ENV=development npx nodemon ./src/server.js",
-    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' NODE_ENV=test jest --passWithNoTests --runInBand",
-    "test:watch": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' NODE_ENV=test jest --watch --passWithNoTests --runInBand",
-    "coverage": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --passWithNoTests --runInBand --coverage --collectCoverageFrom='./src/**'",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' NODE_ENV=test jest --passWithNoTests --runInBand --forceExit",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' NODE_ENV=test jest --watch --passWithNoTests --runInBand --forceExit",
+    "coverage": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --passWithNoTests --runInBand --coverage --collectCoverageFrom='./src/**' --forceExit",
     "lint": "eslint ."
   },
   "repository": {
@@ -37,6 +37,7 @@
     "mongodb": "^5.5.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.1",
     "dotenv-cli": "^7.2.1",
     "dotenv-expand": "^10.0.0",
     "eslint": "^8.41.0",
