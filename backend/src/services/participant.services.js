@@ -1,3 +1,4 @@
+import { errorHelper } from "../helpers/error.helper.js";
 import { participantRepository } from "../repositories/participant.repository.js";
 
 function isTestingEnvironment() {
@@ -15,7 +16,7 @@ async function validateParticipationQuantity({ participation, minus = 0 }) {
   const participantionSum = totalParticipation + participation - minus;
 
   if (participantionSum > 100) {
-    throw new Error(`Participation exceeded by ${participantionSum - 100}!`, { cause: { type: "Bad Request" } });
+    throw errorHelper.badRequest(`Participation exceeded by ${participantionSum - 100}!`);
   }
 }
 
@@ -36,7 +37,7 @@ async function upsert(data) {
   const result = await participantRepository.upsert(participant, existingParticipant || {});
 
   if (!result.ok) {
-    throw new Error("There was an error saving participant!");
+    throw errorHelper.server("There was an error saving participant!");
   }
 
   return { data: result.value, updated: result.lastErrorObject.updatedExisting };

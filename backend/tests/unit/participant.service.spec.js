@@ -26,6 +26,11 @@ describe("getTotalParticipation", () => {
 });
 
 describe("validateParticipationQuantity", () => {
+  const expectedError = {
+    type: expect.any(String),
+    message: expect.any(String),
+  };
+
   it("should return undefined without 'minus' param", async () => {
     jest.spyOn(participantRepository, "sumTotal").mockImplementationOnce(() => Promise.resolve([{ total: 50 }]));
     const result = await participantServiceForTesting.validateParticipationQuantity({ participation: 50 });
@@ -44,14 +49,14 @@ describe("validateParticipationQuantity", () => {
     jest.spyOn(participantRepository, "sumTotal").mockImplementationOnce(() => Promise.resolve([{ total: 50 }]));
 
     const result = participantServiceForTesting.validateParticipationQuantity({ participation: 51 });
-    await expect(result).rejects.toBeInstanceOf(Error);
+    await expect(result).rejects.toEqual(expectedError);
   });
 
   it("should return an error without 'minus' param", async () => {
     jest.spyOn(participantRepository, "sumTotal").mockImplementationOnce(() => Promise.resolve([{ total: 50 }]));
 
     const result = participantServiceForTesting.validateParticipationQuantity({ participation: 60, minus: 5 });
-    await expect(result).rejects.toBeInstanceOf(Error);
+    await expect(result).rejects.toEqual(expectedError);
   });
 });
 
@@ -92,6 +97,11 @@ describe("upsert", () => {
   });
 
   it("should return an error if not saved/updated", async () => {
+    const expectedError = {
+      type: expect.any(String),
+      message: expect.any(String),
+    };
+
     jest.spyOn(participantRepository, "sumTotal").mockImplementationOnce(() => Promise.resolve([]));
     jest
       .spyOn(participantServiceForTesting, "validateParticipationQuantity")
@@ -100,6 +110,6 @@ describe("upsert", () => {
     jest.spyOn(participantRepository, "upsert").mockImplementationOnce(() => Promise.resolve({ ok: 0 }));
 
     const result = participantServiceForTesting.upsert(participant);
-    await expect(result).rejects.toBeInstanceOf(Error);
+    await expect(result).rejects.toEqual(expectedError);
   });
 });

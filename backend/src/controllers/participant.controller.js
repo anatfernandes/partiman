@@ -9,8 +9,12 @@ async function upsert(req, res) {
 
     return responseHelper.CREATED({ res, body: result.data });
   } catch (error) {
-    if (error.cause?.type === "Bad Request") {
+    if (error.type === "Bad Request") {
       return responseHelper.BAD_REQUEST({ res, message: error.message });
+    }
+
+    if (error.type === "Internal Server Error") {
+      return responseHelper.SERVER_ERROR({ res, message: error.message });
     }
 
     return responseHelper.SERVER_ERROR({ res });
