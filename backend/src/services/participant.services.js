@@ -34,7 +34,7 @@ async function upsert(data) {
 
   if (!existingParticipant) participant.createdAt = new Date();
 
-  const result = await participantRepository.upsert(participant, existingParticipant || {});
+  const result = await participantRepository.upsert(participant, existingParticipant || participant);
 
   if (!result.ok) {
     throw errorHelper.server("There was an error saving participant!");
