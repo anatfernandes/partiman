@@ -43,9 +43,13 @@ async function upsert(data) {
   return { data: result.value, updated: result.lastErrorObject.updatedExisting };
 }
 
-const participantService = { upsert };
+function list() {
+  return participantRepository.findAll();
+}
+
+const participantService = { upsert, list };
 const participantServiceForTesting = !isTestingEnvironment
   ? {}
-  : { upsert, getTotalParticipation, validateParticipationQuantity };
+  : { ...participantService, getTotalParticipation, validateParticipationQuantity };
 
 export { participantService, participantServiceForTesting };

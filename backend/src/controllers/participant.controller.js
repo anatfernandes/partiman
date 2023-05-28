@@ -21,6 +21,16 @@ async function upsert(req, res) {
   }
 }
 
-const participantController = { upsert };
+async function list(_, res) {
+  try {
+    const participants = await participantService.list();
+
+    return responseHelper.OK({ res, body: participants });
+  } catch (error) {
+    return responseHelper.SERVER_ERROR({ res });
+  }
+}
+
+const participantController = { upsert, list };
 
 export { participantController };

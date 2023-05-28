@@ -93,3 +93,32 @@ describe("POST /participants", () => {
     expect(updatedParticipant.participation).toBe(body.participation);
   });
 });
+
+describe("GET /participants", () => {
+  const uri = `${baseURI}/participants`;
+
+  it("should return status 200 and an empty array if there are no participants yet", async () => {
+    const response = await server.get(uri);
+    expect(response.body).toEqual([]);
+    expect(response.status).toEqual(httpStatus.OK);
+  });
+
+  it("should return status 200 and an array of participants", async () => {
+    const firstParticipant = await createParticipant({});
+    firstParticipant._id = firstParticipant._id.toString();
+    firstParticipant.createdAt = firstParticipant.createdAt.toISOString();
+    firstParticipant.updatedAt = firstParticipant.updatedAt.toISOString();
+
+    const secondParticipant = await createParticipant({});
+    secondParticipant._id = secondParticipant._id.toString();
+    secondParticipant.createdAt = secondParticipant.createdAt.toISOString();
+    secondParticipant.updatedAt = secondParticipant.updatedAt.toISOString();
+
+    const expectedArray = [firstParticipant, secondParticipant];
+
+    const response = await server.get(uri);
+    expect(response.body).toEqual(expect.arrayContaining(expectedArray));
+    expect(response.status).toEqual(httpStatus.OK);
+    expect(response.body.length).toBe(expectedArray.length);
+  });
+});

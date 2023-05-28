@@ -113,3 +113,23 @@ describe("upsert", () => {
     await expect(result).rejects.toEqual(expectedError);
   });
 });
+
+describe("list", () => {
+  it("should return an empty array if there are no participants yet", async () => {
+    const expectResult = [];
+
+    jest.spyOn(participantRepository, "findAll").mockImplementationOnce(() => Promise.resolve(expectResult));
+
+    const result = await participantServiceForTesting.list();
+    expect(result).toEqual(expectResult);
+  });
+
+  it("should return an array of participants", async () => {
+    const expectResult = [generateValidParticipant()];
+
+    jest.spyOn(participantRepository, "findAll").mockImplementationOnce(() => Promise.resolve(expectResult));
+
+    const result = await participantServiceForTesting.list();
+    expect(result).toEqual(expectResult);
+  });
+});
