@@ -9,7 +9,7 @@ const defaultConfig = {
 	padding: "0",
 };
 
-export function Button({ children, config = {}, ...otherProps }) {
+export function Button({ children, config = defaultConfig, ...otherProps }) {
 	return (
 		<Wrapper {...otherProps} {...defaultConfig} {...config}>
 			{children}
