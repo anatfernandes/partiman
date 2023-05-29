@@ -1,6 +1,8 @@
+import { BrowserRouter, Routes } from "react-router-dom";
 import { GlobalStyle } from "../../assets/styles/globalStyle";
 import { QueryClientContextProvider } from "../../contexts";
 import { ToastContainer } from "../../hooks";
+import { Header } from "../header/Header";
 
 function App() {
 	return (
@@ -8,7 +10,11 @@ function App() {
 			<ToastContainer />
 			<GlobalStyle />
 
-			<p>project initialized</p>
+			<BrowserRouter>
+				<Header />
+<main>aaaa</main>
+				<Routes></Routes>
+			</BrowserRouter>
 		</QueryClientContextProvider>
 	);
 }
