@@ -1,3 +1,9 @@
+import { CreateParticipant } from "../../components/create-participant/CreateParticipant";
+
 export function Dashboard() {
-	return <main>dashboard</main>;
+	return (
+		<main>
+			<CreateParticipant />
+		</main>
+	);
 }
