@@ -169,7 +169,7 @@ const GlobalStyle = createGlobalStyle`
         flex-direction: column;
         align-items: initial;
         justify-content: initial;
-        margin: 50px auto 0;
+        margin: 70px auto 0;
         padding-bottom: 30px;
         overflow: hidden;
     }

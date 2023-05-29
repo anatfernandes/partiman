@@ -59,5 +59,6 @@ const Wrapper = styled.button`
 		width: 100%;
 		margin-left: 0;
 		margin-right: 0;
+		font-size: 0.9rem;
 	}
 `;
