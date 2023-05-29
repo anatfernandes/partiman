@@ -74,7 +74,7 @@ export function CreateParticipant() {
 	}
 
 	return (
-		<Wrapper height={isOpen ? "50px" : "auto"}>
+		<Wrapper height={isOpen ? "auto" : "50px"}>
 			<Menu>
 				<span>Create Participant</span>
 				<Icon
