@@ -7,6 +7,7 @@ const participantRouter = Router();
 
 participantRouter
   .post("/", validateBody(participantSchemas.upsert), participantController.upsert)
-  .get("/", participantController.list);
+  .get("/", participantController.list)
+  .delete("/:id", participantController.deleteById);
 
 export { participantRouter };

@@ -3,7 +3,12 @@ import supertest from "supertest";
 import httpStatus from "http-status";
 import { app } from "../../src/app.js";
 import { clearDatabase, countParticipants, findParticipantById } from "../helpers/database.helper.js";
-import { createParticipant, generateInvalidParticipant, generateValidParticipant } from "../factories/index.js";
+import {
+  createParticipant,
+  generateInvalidParticipant,
+  generateValidParticipant,
+  generateValidParticipantId,
+} from "../factories/index.js";
 
 const server = supertest(app);
 const baseURI = "/api";
@@ -120,5 +125,36 @@ describe("GET /participants", () => {
     expect(response.body).toEqual(expect.arrayContaining(expectedArray));
     expect(response.status).toEqual(httpStatus.OK);
     expect(response.body.length).toBe(expectedArray.length);
+  });
+});
+
+describe("DELETE /participants/:id", () => {
+  const uri = `${baseURI}/participants`;
+
+  it("should return status 400 if parameter 'id' is invalid", async () => {
+    const response = await server.delete(`${uri}/1`);
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+  });
+
+  it("should return status 404 if participant does not exist", async () => {
+    const id = generateValidParticipantId();
+    const response = await server.delete(`${uri}/${id}`);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
+
+  it("should return status 204 if participant was deleted", async () => {
+    const participant = await createParticipant({});
+    const response = await server.delete(`${uri}/${participant._id}`);
+    expect(response.status).toBe(httpStatus.NO_CONTENT);
+  });
+
+  it("should delete participant in database", async () => {
+    const participant = await createParticipant({});
+
+    const beforeCount = await countParticipants();
+    await server.delete(`${uri}/${participant._id}`);
+    const afterCount = await countParticipants();
+
+    expect(afterCount).toBe(beforeCount - 1);
   });
 });

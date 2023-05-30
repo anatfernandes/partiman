@@ -18,6 +18,10 @@ function findByCredentials(firstname, lastname) {
   return db.collection(MONGO_COLLECTIONS_ENUM.PARTICIPANTS).findOne({ firstname, lastname });
 }
 
+function findById(id) {
+  return db.collection(MONGO_COLLECTIONS_ENUM.PARTICIPANTS).findOne({ _id: id });
+}
+
 function findAll() {
   return db.collection(MONGO_COLLECTIONS_ENUM.PARTICIPANTS).find().sort({ participation: -1 }).toArray();
 }
@@ -32,6 +36,10 @@ function upsert(data, existingParticipant) {
   );
 }
 
-const participantRepository = { sumTotal, findByCredentials, findAll, upsert };
+function deleteById(id) {
+  return db.collection(MONGO_COLLECTIONS_ENUM.PARTICIPANTS).deleteOne({ _id: id });
+}
+
+const participantRepository = { sumTotal, findByCredentials, findById, findAll, upsert, deleteById };
 
 export { participantRepository };
