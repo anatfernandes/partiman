@@ -6,14 +6,13 @@ import logoFull from "/full-logo.svg";
 import logo from "/logo.svg";
 
 export function Header() {
-	const windowWidth = useRef(window.innerWidth);
+	const { current: windowWidth } = useRef(window.innerWidth);
+
+	const imageSrc = windowWidth >= 500 ? logoFull : logo;
 
 	const largeIconConfig = { size: "1.5rem", color: "#38B9E2" };
 	const smallIconConfig = { ...largeIconConfig, size: "1.3rem" };
-	const iconConfig =
-		windowWidth.current >= 500 ? largeIconConfig : smallIconConfig;
-
-	const imageSrc = windowWidth.current >= 500 ? logoFull : logo;
+	const iconConfig = windowWidth >= 500 ? largeIconConfig : smallIconConfig;
 
 	return (
 		<Wrapper>
@@ -23,6 +22,11 @@ export function Header() {
 				<Link to="/dashboard" title="Dashboard">
 					<Icon type="home" config={{ ...iconConfig, title: "Dashboard" }} />
 					<span>Dashboard</span>
+				</Link>
+
+				<Link to="/save" title="Add/Edit">
+					<Icon type="plus" config={{ ...iconConfig, title: "Add/Edit" }} />
+					<span>Add/Edit</span>
 				</Link>
 			</div>
 		</Wrapper>
@@ -85,6 +89,7 @@ const Wrapper = styled.header`
 	@media (max-width: 500px) {
 		a {
 			font-size: 0.6rem;
+			padding: 0.1rem 0.3rem;
 
 			svg {
 				font-size: 0.3rem;

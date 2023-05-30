@@ -3,14 +3,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GlobalStyle } from "../../assets/styles/globalStyle";
 import { QueryClientContextProvider } from "../../contexts";
 import { ToastContainer } from "../../hooks";
-import { Dashboard } from "../../pages";
+import { Dashboard, SaveParticipant } from "../../pages";
 import { Header } from "../header/Header";
 
 function App() {
 	useEffect(() => {
-		const baseUrl = "http://localhost:5173/";
-		if (window.location.href === baseUrl) {
-			window.location.href = `${baseUrl}dashboard`;
+		if (window.location.pathname === "/") {
+			window.location.pathname = "/dashboard";
 		}
 	}, []);
 
@@ -24,6 +23,7 @@ function App() {
 
 				<Routes>
 					<Route index path="/dashboard" element={<Dashboard />} />
+					<Route path="/save" element={<SaveParticipant />} />
 				</Routes>
 			</BrowserRouter>
 		</QueryClientContextProvider>

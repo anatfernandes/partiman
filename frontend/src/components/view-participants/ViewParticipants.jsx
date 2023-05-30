@@ -5,9 +5,10 @@ import { useRequestQuery, useToast } from "../../hooks";
 import { requestKeyEnum } from "../../enums/requestKey";
 import { Table } from "../table/Table";
 import { Chart } from "../chart/Chart";
-import { Loading, Subtitle, Title } from "../shared";
+import { Icon, Loading, Subtitle, Title } from "../shared";
+import { Link } from "react-router-dom";
 
-export function ViewParticipants() {
+export function ViewParticipants({ edit = false }) {
 	const toast = useToast();
 	const [viewMode, setViewMode] = useState("table");
 	const { current: windowWidth } = useRef(window.innerWidth);
@@ -61,6 +62,19 @@ export function ViewParticipants() {
 			participant.lastname,
 			`${participant.participation}%`,
 		]);
+
+		if (edit) {
+			head.push("Edit");
+
+			body.forEach((participant, index) => {
+				participant.push(
+					<Link to="/save" state={participants[index]}>
+						<Icon type="edit" config={{ color: "#38B9E2" }} />
+					</Link>
+				);
+			});
+		}
+
 		const data = { head, body };
 
 		return <Table {...data} />;
