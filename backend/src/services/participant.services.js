@@ -37,7 +37,7 @@ async function upsert(data) {
   const result = await participantRepository.upsert(participant, existingParticipant || participant);
 
   if (!result.ok) {
-    throw errorHelper.server("There was an error saving participant!");
+    throw errorHelper.server("An error occurred while saving the participant!");
   }
 
   return { data: result.value, updated: result.lastErrorObject.updatedExisting };
@@ -47,7 +47,19 @@ function list() {
   return participantRepository.findAll();
 }
 
-const participantService = { upsert, list };
+async function deleteById(id) {
+  const participant = await participantRepository.findById(id);
+
+  if (!participant) throw errorHelper.notFound("Participant not found!");
+
+  const result = await participantRepository.deleteById(participant._id);
+
+  if (result.deletedCount < 1) {
+    throw errorHelper.server("An error occurred while deleting the participant!");
+  }
+}
+
+const participantService = { upsert, list, deleteById };
 const participantServiceForTesting = !isTestingEnvironment
   ? {}
   : { ...participantService, getTotalParticipation, validateParticipationQuantity };

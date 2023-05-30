@@ -133,3 +133,38 @@ describe("list", () => {
     expect(result).toEqual(expectResult);
   });
 });
+
+describe("deleteById", () => {
+  it("should return an error if there is no participant with id", async () => {
+    const expectedError = {
+      type: expect.any(String),
+      message: expect.any(String),
+    };
+
+    jest.spyOn(participantRepository, "findById").mockImplementationOnce(() => Promise.resolve(null));
+
+    const result = participantServiceForTesting.deleteById(1);
+    await expect(result).rejects.toEqual(expectedError);
+  });
+
+  it("should return an error if not deleted", async () => {
+    const expectedError = {
+      type: expect.any(String),
+      message: expect.any(String),
+    };
+
+    jest.spyOn(participantRepository, "findById").mockImplementationOnce(() => Promise.resolve({}));
+    jest.spyOn(participantRepository, "deleteById").mockImplementationOnce(() => Promise.resolve({ deletedCount: 0 }));
+
+    const result = participantServiceForTesting.deleteById(1);
+    await expect(result).rejects.toEqual(expectedError);
+  });
+
+  it("should return undefined if deleted", async () => {
+    jest.spyOn(participantRepository, "findById").mockImplementationOnce(() => Promise.resolve({}));
+    jest.spyOn(participantRepository, "deleteById").mockImplementationOnce(() => Promise.resolve({ deletedCount: 1 }));
+
+    const result = await participantServiceForTesting.deleteById(1);
+    expect(result).toBeUndefined();
+  });
+});

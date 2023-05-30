@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { mongo } from "../../src/database/mongo.js";
 import { MONGO_COLLECTIONS_ENUM } from "../../src/enums/index.js";
+import { ObjectId } from "mongodb";
 
 let db;
 async function connectDb() {
@@ -18,6 +19,10 @@ function generateValidParticipant() {
 
 function generateInvalidParticipant() {
   return { firstname: faker.person.firstName() };
+}
+
+function generateValidParticipantId() {
+  return new ObjectId();
 }
 
 async function createParticipant({
@@ -39,4 +44,4 @@ async function createParticipant({
   return created.value;
 }
 
-export { generateInvalidParticipant, generateValidParticipant, createParticipant };
+export { generateInvalidParticipant, generateValidParticipant, generateValidParticipantId, createParticipant };
