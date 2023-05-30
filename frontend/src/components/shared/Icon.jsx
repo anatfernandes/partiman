@@ -5,7 +5,7 @@ import {
 	AiOutlinePlusCircle,
 	AiOutlineRight,
 } from "react-icons/ai";
-import { BsTrashFill } from "react-icons/bs";
+import { BsTrashFill, BsViewList } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
 import { IoExitOutline, IoHome, IoPaperPlaneSharp } from "react-icons/io5";
 
@@ -19,6 +19,7 @@ const IconTypes = Object.freeze({
 	exit: IoExitOutline,
 	next: AiOutlineRight,
 	return: AiOutlineLeft,
+	view: BsViewList,
 	close: FaBan,
 });
 

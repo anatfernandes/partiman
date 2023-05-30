@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GlobalStyle } from "../../assets/styles/globalStyle";
 import { QueryClientContextProvider } from "../../contexts";
 import { ToastContainer } from "../../hooks";
-import { Dashboard, SaveParticipant } from "../../pages";
+import { Dashboard, SaveParticipant, ViewParticipantsPage } from "../../pages";
 import { Header } from "../header/Header";
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
 				<Routes>
 					<Route index path="/dashboard" element={<Dashboard />} />
 					<Route path="/save" element={<SaveParticipant />} />
+					<Route path="/view" element={<ViewParticipantsPage />} />
 				</Routes>
 			</BrowserRouter>
 		</QueryClientContextProvider>

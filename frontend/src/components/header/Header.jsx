@@ -18,7 +18,7 @@ export function Header() {
 		<Wrapper>
 			<img src={imageSrc} alt="Partiman" />
 
-			<div>
+			<nav>
 				<Link to="/dashboard" title="Dashboard">
 					<Icon type="home" config={{ ...iconConfig, title: "Dashboard" }} />
 					<span>Dashboard</span>
@@ -28,7 +28,12 @@ export function Header() {
 					<Icon type="plus" config={{ ...iconConfig, title: "Add/Edit" }} />
 					<span>Add/Edit</span>
 				</Link>
-			</div>
+
+				<Link to="/view" title="View">
+					<Icon type="view" config={{ ...iconConfig, title: "View" }} />
+					<span>View</span>
+				</Link>
+			</nav>
 		</Wrapper>
 	);
 }
@@ -53,7 +58,7 @@ const Wrapper = styled.header`
 		width: auto;
 	}
 
-	> div {
+	> nav {
 		display: flex;
 		align-items: center;
 	}
