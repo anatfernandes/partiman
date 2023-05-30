@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "./useToast";
 
 function useForm(defaultForm = {}) {
 	const [form, setForm] = useState(defaultForm);
 	const toast = useToast();
+
+	useEffect(() => {
+		setForm(defaultForm);
+	}, [defaultForm]);
 
 	function updateForm(event) {
 		const key = event.target.name;

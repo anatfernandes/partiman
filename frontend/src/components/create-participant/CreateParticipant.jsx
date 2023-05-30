@@ -5,7 +5,7 @@ import { useForm, useRequestMutation, useToast } from "../../hooks";
 import { requestKeyEnum } from "../../enums/requestKey";
 import { Button, Icon, Input } from "../shared";
 
-export function CreateParticipant({ expand = true }) {
+export function CreateParticipant({ expand = true, defaultParticipant = {} }) {
 	const toast = useToast();
 	const [isOpen, setIsOpen] = useState(!expand);
 
@@ -15,7 +15,7 @@ export function CreateParticipant({ expand = true }) {
 		validateForm,
 		handleForm,
 		clearForm,
-	} = useForm();
+	} = useForm(defaultParticipant);
 
 	const request = useRequestMutation({
 		key: [requestKeyEnum.participants],
