@@ -13,7 +13,7 @@ export function Subtitle({ children, config = defaultConfig, ...otherProps }) {
 	);
 }
 
-const Wrapper = styled.h1`
+const Wrapper = styled.p`
 	font-size: 1rem;
 	line-height: 1.3rem;
 	font-weight: 400;
