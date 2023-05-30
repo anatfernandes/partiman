@@ -15,7 +15,7 @@ async function throwError(response) {
 		.json()
 		.then((response) => response)
 		.catch(() => ({
-			message: "Um erro ocorreu!",
+			message: "An error occurred!",
 		}));
 
 	throw new Error(error.message, {
@@ -57,6 +57,22 @@ async function postRequest({ path, body, haveResponse = false }) {
 	return response.json();
 }
 
+async function deleteRequest({ path, haveResponse = false }) {
+	const config = createHeader();
+	const response = await fetch(`${BASE_URI}${path}`, {
+		method: "DELETE",
+		...config,
+	});
+
+	if (response.status >= 400) {
+		return throwError(response);
+	}
+
+	if (!haveResponse) return;
+
+	return response.json();
+}
+
 function listParticipants() {
 	return getRequest({ path: "/participants" });
 }
@@ -65,9 +81,14 @@ function createParticipant(body) {
 	return postRequest({ path: "/participants", body, haveResponse: true });
 }
 
+function deleteParticipant(id) {
+	return deleteRequest({ path: `/participants/${id}`, haveResponse: false });
+}
+
 const api = {
 	listParticipants,
 	createParticipant,
+	deleteParticipant,
 };
 
 export { api };

@@ -1,14 +1,19 @@
 import styled from "styled-components";
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../../services/partiman";
-import { useRequestQuery, useToast } from "../../hooks";
 import { requestKeyEnum } from "../../enums/requestKey";
+import { useRequestQuery, useToast } from "../../hooks";
+import { Icon, Loading, Subtitle, Title } from "../shared";
 import { Table } from "../table/Table";
 import { Chart } from "../chart/Chart";
-import { Icon, Loading, Subtitle, Title } from "../shared";
-import { Link } from "react-router-dom";
 
-export function ViewParticipants({ edit = false, textAlign = "center" }) {
+export function ViewParticipants({
+	edit = false,
+	allowDelete = false,
+	textAlign = "center",
+	setModalConfig,
+}) {
 	const titleConfig = { align: textAlign };
 
 	const toast = useToast();
@@ -73,6 +78,27 @@ export function ViewParticipants({ edit = false, textAlign = "center" }) {
 					<Link to="/save" state={participants[index]}>
 						<Icon type="edit" config={{ color: "#38B9E2" }} />
 					</Link>
+				);
+			});
+		}
+
+		if (allowDelete) {
+			head.push("Delete");
+
+			body.forEach((participant, index) => {
+				participant.push(
+					<Icon
+						type="trash"
+						config={{ color: "#FF0000", title: "delete" }}
+						style={{ cursor: "pointer" }}
+						onClick={() =>
+							setModalConfig((prev) => ({
+								...prev,
+								isOpen: true,
+								participant: participants[index]._id,
+							}))
+						}
+					/>
 				);
 			});
 		}
