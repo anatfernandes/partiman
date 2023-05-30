@@ -9,8 +9,9 @@ import { Loading, Subtitle, Title } from "../shared";
 
 export function ViewParticipants() {
 	const toast = useToast();
-	const [view, setView] = useState("table");
+	const [viewMode, setViewMode] = useState("table");
 	const { current: windowWidth } = useRef(window.innerWidth);
+
 	const { data: participants, isLoading } = useRequestQuery({
 		key: [requestKeyEnum.participants],
 		requestCallback: api.listParticipants,
@@ -23,24 +24,33 @@ export function ViewParticipants() {
 		bar: barGraphView,
 	};
 
-	function getCurrentViewStyle(mode) {
-		return mode === view
-			? {
-					filter: "brightness(0.9)",
-					borderBottomColor: "var(--medium-gray-light)",
-			  }
-			: {};
-	}
-
-	function setViewMode(mode) {
-		setView(mode);
-	}
-
 	function onRequestError(error) {
 		toast({
 			text: error.cause?.message || "Could not get participants!",
 			type: "error",
 		});
+	}
+
+	function getClassName(mode) {
+		return mode === viewMode ? "current-mode" : "";
+	}
+
+	function getFormattedDataToGraph() {
+		const labels = participants.map(
+			({ firstname, lastname }) => `${firstname} ${lastname}`
+		);
+		const datasetData = participants.map(({ participation }) => participation);
+		const legend = {
+			display: true,
+			position: windowWidth <= 400 ? "top" : "right",
+		};
+
+		return {
+			label: "participation (%)",
+			labels,
+			datasetData,
+			legend,
+		};
 	}
 
 	function tableView() {
@@ -57,38 +67,13 @@ export function ViewParticipants() {
 	}
 
 	function doughnutGraphView() {
-		const labels = participants.map(
-			({ firstname, lastname }) => `${firstname} ${lastname}`
-		);
-		const datasetData = participants.map(({ participation }) => participation);
-		const legend = {
-			display: true,
-			position: windowWidth <= 400 ? "top" : "right",
-		};
-
-		const data = {
-			label: "participation (%)",
-			labels,
-			datasetData,
-			legend,
-		};
-
+		const data = getFormattedDataToGraph();
 		return <Chart type="doughnut" {...data} />;
 	}
 
 	function barGraphView() {
-		const labels = participants.map(
-			({ firstname, lastname }) => `${firstname} ${lastname}`
-		);
-		const datasetData = participants.map(({ participation }) => participation);
-		const legend = { display: false };
-
-		const data = {
-			label: "participation (%)",
-			labels,
-			datasetData,
-			legend,
-		};
+		const data = getFormattedDataToGraph();
+		data.legend = { display: false };
 
 		return <Chart type="bar" {...data} />;
 	}
@@ -96,41 +81,40 @@ export function ViewParticipants() {
 	return (
 		<Wrapper>
 			<Title>View Participants</Title>
-			<Subtitle>
-				View all participant information. Change the view mode in the menu
-				below.
-			</Subtitle>
+			<Subtitle>View all participant information.</Subtitle>
 
 			{isLoading && <Loading />}
 
 			{!isLoading && participants && participants.length === 0 && (
-				<span>There are no participants yet!</span>
+				<NoParticipants>There are no participants yet!</NoParticipants>
 			)}
 
 			{!isLoading && participants && participants.length > 0 && (
 				<>
+					<Subtitle>Change the view mode in the menu below.</Subtitle>
+
 					<Menu>
-						<span
+						<li
 							onClick={() => setViewMode("table")}
-							style={getCurrentViewStyle("table")}
+							className={getClassName("table")}
 						>
 							Table
-						</span>
-						<span
+						</li>
+						<li
 							onClick={() => setViewMode("doughnut")}
-							style={getCurrentViewStyle("doughnut")}
+							className={getClassName("doughnut")}
 						>
 							Doughnut Graph
-						</span>
-						<span
+						</li>
+						<li
 							onClick={() => setViewMode("bar")}
-							style={getCurrentViewStyle("bar")}
+							className={getClassName("bar")}
 						>
 							Bar Graph
-						</span>
+						</li>
 					</Menu>
 
-					{views[view]()}
+					{views[viewMode]()}
 				</>
 			)}
 		</Wrapper>
@@ -143,7 +127,7 @@ const Wrapper = styled.section`
 	margin: 1rem 0;
 `;
 
-const Menu = styled.nav`
+const Menu = styled.ul`
 	width: 100%;
 	display: flex;
 	margin: 2rem 0;
@@ -152,7 +136,7 @@ const Menu = styled.nav`
 	font-weight: 400;
 	color: var(--medium-gray-dark);
 
-	span {
+	li {
 		width: fit-content;
 		padding: 0.3rem;
 		margin: 0 0.4rem;
@@ -161,18 +145,31 @@ const Menu = styled.nav`
 		border-bottom: 2px solid transparent;
 		cursor: default;
 
+		&.current-mode,
+		:hover {
+			border-bottom-color: var(--medium-gray-light);
+			filter: brightness(0.9);
+		}
+
 		:hover {
 			font-weight: 500;
-			border-bottom: 2px solid var(--medium-gray-light);
-			filter: brightness(0.9);
 		}
 	}
 
 	@media (max-width: 450px) {
 		font-size: 0.9rem;
 
-		span {
+		li {
 			border-bottom-width: 1px;
 		}
 	}
+`;
+
+const NoParticipants = styled.span`
+	font-size: 1rem;
+	line-height: 1.2rem;
+	font-weight: 400;
+	color: var(--medium-gray-dark);
+	margin: 2rem 0;
+	display: inherit;
 `;
