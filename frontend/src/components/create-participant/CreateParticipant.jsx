@@ -5,9 +5,9 @@ import { useForm, useRequestMutation, useToast } from "../../hooks";
 import { requestKeyEnum } from "../../enums/requestKey";
 import { Button, Icon, Input } from "../shared";
 
-export function CreateParticipant() {
+export function CreateParticipant({ expand = true }) {
 	const toast = useToast();
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(!expand);
 
 	const {
 		form: participant,
@@ -78,14 +78,16 @@ export function CreateParticipant() {
 
 	return (
 		<Wrapper height={isOpen ? "auto" : "50px"}>
-			<Menu>
-				<span>Create Participant</span>
-				<Icon
-					type={isOpen ? "minus" : "plus"}
-					config={{ title: "send", size: "1.5rem" }}
-					onClick={toggleIsOpen}
-				/>
-			</Menu>
+			{expand && (
+				<Menu>
+					<span>Save Participant</span>
+					<Icon
+						type={isOpen ? "minus" : "plus"}
+						config={{ title: "send", size: "1.5rem" }}
+						onClick={toggleIsOpen}
+					/>
+				</Menu>
+			)}
 
 			<form onSubmit={(e) => handleForm(e, handleParticipant)}>
 				<div>
@@ -141,11 +143,11 @@ const Wrapper = styled.section`
 	form {
 		width: 100%;
 		height: auto;
+		margin-top: 1rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		margin-top: 2rem;
 
 		div {
 			width: 100%;
@@ -161,6 +163,7 @@ const Wrapper = styled.section`
 const Menu = styled.div`
 	width: 100%;
 	height: 50px;
+	margin-bottom: 1rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
