@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Subtitle, Title } from "../../components/shared";
 import { CreateParticipant } from "../../components/create-participant/CreateParticipant";
-import { useLocation, useNavigation } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 export function SaveParticipant() {
 	const location = useLocation();

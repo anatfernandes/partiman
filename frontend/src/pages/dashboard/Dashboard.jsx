@@ -8,7 +8,7 @@ export function Dashboard() {
 			<Title config={{ align: "center" }}>Dashboard</Title>
 
 			<CreateParticipant />
-			<ViewParticipants edit={true} />
+			<ViewParticipants edit={true} textAlign="start" />
 		</main>
 	);
 }

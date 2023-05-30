@@ -8,7 +8,9 @@ import { Chart } from "../chart/Chart";
 import { Icon, Loading, Subtitle, Title } from "../shared";
 import { Link } from "react-router-dom";
 
-export function ViewParticipants({ edit = false }) {
+export function ViewParticipants({ edit = false, textAlign = "center" }) {
+	const titleConfig = { align: textAlign };
+
 	const toast = useToast();
 	const [viewMode, setViewMode] = useState("table");
 	const { current: windowWidth } = useRef(window.innerWidth);
@@ -94,8 +96,10 @@ export function ViewParticipants({ edit = false }) {
 
 	return (
 		<Wrapper>
-			<Title>View Participants</Title>
-			<Subtitle>View all participant information.</Subtitle>
+			<Title config={titleConfig}>View Participants</Title>
+			<Subtitle config={titleConfig}>
+				View all participant information.
+			</Subtitle>
 
 			{isLoading && <Loading />}
 
@@ -105,7 +109,9 @@ export function ViewParticipants({ edit = false }) {
 
 			{!isLoading && participants && participants.length > 0 && (
 				<>
-					<Subtitle>Change the view mode in the menu below.</Subtitle>
+					<Subtitle config={titleConfig}>
+						Change the view mode in the menu below.
+					</Subtitle>
 
 					<Menu>
 						<li
