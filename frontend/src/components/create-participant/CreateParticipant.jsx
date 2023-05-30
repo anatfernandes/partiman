@@ -78,7 +78,7 @@ export function CreateParticipant() {
 			<Menu>
 				<span>Create Participant</span>
 				<Icon
-					type={isOpen ? "plus" : "minus"}
+					type={isOpen ? "minus" : "plus"}
 					config={{ title: "send", size: "1.5rem" }}
 					onClick={toggleIsOpen}
 				/>
@@ -131,6 +131,7 @@ const Wrapper = styled.section`
 	height: ${(props) => props.height};
 	padding: 0 1rem 1rem;
 	border-radius: 5px;
+	margin: 1rem 0;
 	background-color: var(--blue);
 	overflow: hidden;
 

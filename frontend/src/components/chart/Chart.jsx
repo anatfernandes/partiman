@@ -75,7 +75,13 @@ export function Chart({
 
 	const charts = {
 		doughnut: <Doughnut data={data} options={options} style={style} />,
-		bar: <Bar data={data} options={options} style={style} />,
+		bar: (
+			<Bar
+				data={data}
+				options={options}
+				style={{ ...style, maxWidth: "500px" }}
+			/>
+		),
 	};
 
 	return charts[type] || <></>;
