@@ -1,14 +1,22 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { api } from "../../services/partiman";
-import { useRequestMutation, useToast } from "../../hooks";
+import { useForm, useRequestMutation, useToast } from "../../hooks";
 import { requestKeyEnum } from "../../enums/requestKey";
 import { Button, Icon, Input } from "../shared";
 
 export function CreateParticipant() {
 	const toast = useToast();
 	const [isOpen, setIsOpen] = useState(false);
-	const [participant, setParticipant] = useState({});
+
+	const {
+		form: participant,
+		updateForm,
+		validateForm,
+		handleForm,
+		clearForm,
+	} = useForm();
+
 	const request = useRequestMutation({
 		key: [requestKeyEnum.participants],
 		requestCallback: (body) => api.createParticipant(body),
@@ -21,36 +29,31 @@ export function CreateParticipant() {
 	}
 
 	function isValidForm() {
-		let text = "";
+		const validations = [
+			{
+				error:
+					participant.firstname.length < 3 || participant.firstname.length > 30,
+				message: '"First name" must be between 3 and 30 characters long!',
+			},
+			{
+				error:
+					participant.lastname.length < 3 || participant.lastname.length > 30,
+				message: '"Last name" must be between 3 and 30 characters long!',
+			},
+			{
+				error:
+					participant.participation <= 0 || participant.participation > 100,
+				message:
+					'"Participation" must be greater than 0 and less than or equal to 100!',
+			},
+		];
 
-		if (participant.participation <= 0 || participant.participation > 100) {
-			text = '"Participation" must be between 0 and 100!';
-		}
-		if (participant.lastname.length < 3 || participant.lastname.length > 30) {
-			text = '"Last name" must be between 3 and 30 characters long!';
-		}
-		if (participant.firstname.length < 3 || participant.firstname.length > 30) {
-			text = '"First name" must be between 3 and 30 characters long!';
-		}
-
-		if (text) {
-			toast({ text, type: "warning" });
-			return false;
-		}
-
-		return true;
+		return validateForm(validations);
 	}
 
-	function updateForm(event) {
-		const key = event.target.name;
-		const value = event.target.value;
-		setParticipant((prev) => ({ ...prev, [key]: value }));
-	}
-
-	function handleForm(event) {
-		event.preventDefault();
-
+	function handleParticipant() {
 		participant.participation = Number(participant.participation);
+
 		if (!isValidForm()) return;
 
 		request.mutate(participant);
@@ -70,7 +73,7 @@ export function CreateParticipant() {
 		});
 
 		request.reset();
-		setParticipant({});
+		clearForm();
 	}
 
 	return (
@@ -84,7 +87,7 @@ export function CreateParticipant() {
 				/>
 			</Menu>
 
-			<form onSubmit={handleForm}>
+			<form onSubmit={(e) => handleForm(e, handleParticipant)}>
 				<div>
 					<Input
 						required
