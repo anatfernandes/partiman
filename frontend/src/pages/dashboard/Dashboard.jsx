@@ -10,6 +10,13 @@ export function Dashboard() {
 		onSuccess: () => setModalConfig({ isOpen: false }),
 	});
 
+	function onHandleDelete(participant) {
+		setModalConfig({
+			isOpen: true,
+			participant,
+		});
+	}
+
 	return (
 		<main>
 			<Modal
@@ -22,10 +29,9 @@ export function Dashboard() {
 
 			<CreateParticipant />
 			<ViewParticipants
-				edit={true}
-				allowDelete={true}
+				allowEditing={true}
 				textAlign="start"
-				setModalConfig={setModalConfig}
+				onHandleDelete={onHandleDelete}
 			/>
 		</main>
 	);
