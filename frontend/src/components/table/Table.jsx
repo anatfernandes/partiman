@@ -51,5 +51,18 @@ const Wrapper = styled.table`
 		::-webkit-scrollbar {
 			display: none;
 		}
+
+		svg {
+			width: 1.3rem;
+			height: 1.3rem;
+			cursor: pointer;
+		}
+
+		@media (max-width: 450px) {
+			svg {
+				width: 1rem;
+				height: 1rem;
+			}
+		}
 	}
 `;
