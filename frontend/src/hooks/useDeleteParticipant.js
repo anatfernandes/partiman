@@ -34,11 +34,16 @@ function useDeleteParticipant({
 		request.reset();
 	}
 
-	function deleteParticipant(id) {
+	function handle(id) {
 		request.mutate(id);
 	}
 
-	return deleteParticipant;
+	return {
+		handle,
+		isloading: request.isLoading,
+		isError: request.isError,
+		isSuccess: request.isSuccess,
+	};
 }
 
 export { useDeleteParticipant };
