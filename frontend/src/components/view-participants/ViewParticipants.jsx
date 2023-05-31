@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "../../services/partiman";
-import { requestKeyEnum } from "../../enums/requestKey";
-import { useRequestQuery, useToast } from "../../hooks";
+import { useListParticipants } from "../../hooks";
 import { Icon, Loading, Subtitle, Title } from "../shared";
 import { Table } from "../table/Table";
 import { Chart } from "../chart/Chart";
@@ -16,28 +14,15 @@ export function ViewParticipants({
 }) {
 	const titleConfig = { align: textAlign };
 
-	const toast = useToast();
 	const [viewMode, setViewMode] = useState("table");
 	const { current: windowWidth } = useRef(window.innerWidth);
-
-	const { data: participants, isLoading } = useRequestQuery({
-		key: [requestKeyEnum.participants],
-		requestCallback: api.listParticipants,
-		onError: onRequestError,
-	});
+	const { participants, isLoading } = useListParticipants({});
 
 	const views = {
 		table: tableView,
 		doughnut: doughnutGraphView,
 		bar: barGraphView,
 	};
-
-	function onRequestError(error) {
-		toast({
-			text: error.cause?.message || "Could not get participants!",
-			type: "error",
-		});
-	}
 
 	function getClassName(mode) {
 		return mode === viewMode ? "current-mode" : "";
