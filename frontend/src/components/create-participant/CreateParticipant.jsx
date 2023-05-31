@@ -1,12 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { api } from "../../services/partiman";
-import { useForm, useRequestMutation, useToast } from "../../hooks";
-import { requestKeyEnum } from "../../enums/requestKey";
+import { useForm, useSaveParticipant } from "../../hooks";
 import { Button, Icon, Input } from "../shared";
 
 export function CreateParticipant({ expand = true, defaultParticipant = {} }) {
-	const toast = useToast();
 	const [isOpen, setIsOpen] = useState(!expand);
 
 	const {
@@ -17,11 +14,8 @@ export function CreateParticipant({ expand = true, defaultParticipant = {} }) {
 		clearForm,
 	} = useForm(defaultParticipant);
 
-	const request = useRequestMutation({
-		key: [requestKeyEnum.participants],
-		requestCallback: (body) => api.createParticipant(body),
-		onError: onRequestError,
-		onSuccess: onRequestSuccess,
+	const saveParticipant = useSaveParticipant({
+		onSuccess: clearForm,
 	});
 
 	function toggleIsOpen() {
@@ -56,24 +50,7 @@ export function CreateParticipant({ expand = true, defaultParticipant = {} }) {
 
 		if (!isValidForm()) return;
 
-		request.mutate(participant);
-	}
-
-	function onRequestError(error) {
-		toast({
-			text: error.cause?.message || "Could not save participant!",
-			type: "error",
-		});
-	}
-
-	function onRequestSuccess(response) {
-		toast({
-			text: response?.message || "Participant saved!",
-			type: "success",
-		});
-
-		request.reset();
-		clearForm();
+		saveParticipant.save(participant);
 	}
 
 	return (
@@ -122,7 +99,7 @@ export function CreateParticipant({ expand = true, defaultParticipant = {} }) {
 					/>
 				</div>
 
-				<Button disabled={request.isLoading}>
+				<Button disabled={saveParticipant.isloading}>
 					<span style={{ marginRight: "0.5rem" }}>SEND</span>
 					<Icon type="send" config={{ size: "1rem" }} />
 				</Button>
