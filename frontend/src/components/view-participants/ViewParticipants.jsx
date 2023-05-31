@@ -7,10 +7,9 @@ import { Table } from "../table/Table";
 import { Chart } from "../chart/Chart";
 
 export function ViewParticipants({
-	edit = false,
-	allowDelete = false,
+	allowEditing = false,
 	textAlign = "center",
-	setModalConfig,
+	onHandleDelete = () => {},
 }) {
 	const titleConfig = { align: textAlign };
 
@@ -39,11 +38,36 @@ export function ViewParticipants({
 		};
 
 		return {
-			label: "participation (%)",
+			legend,
 			labels,
 			datasetData,
-			legend,
+			label: "participation (%)",
 		};
+	}
+
+	function addEditHeadersInTable(head) {
+		head.push("Edit", "Delete");
+	}
+
+	function addEditFieldsInTable(body) {
+		body.forEach((participant, index) => {
+			const participantData = participants[index];
+
+			const editField = (
+				<Link to="/save" state={participantData}>
+					<Icon type="edit" config={{ color: "#38B9E2" }} />
+				</Link>
+			);
+			const deletionField = (
+				<Icon
+					type="trash"
+					config={{ color: "#FF0000", title: "delete" }}
+					onClick={() => onHandleDelete(participantData._id)}
+				/>
+			);
+
+			participant.push(editField, deletionField);
+		});
 	}
 
 	function tableView() {
@@ -55,37 +79,9 @@ export function ViewParticipants({
 			`${participant.participation}%`,
 		]);
 
-		if (edit) {
-			head.push("Edit");
-
-			body.forEach((participant, index) => {
-				participant.push(
-					<Link to="/save" state={participants[index]}>
-						<Icon type="edit" config={{ color: "#38B9E2" }} />
-					</Link>
-				);
-			});
-		}
-
-		if (allowDelete) {
-			head.push("Delete");
-
-			body.forEach((participant, index) => {
-				participant.push(
-					<Icon
-						type="trash"
-						config={{ color: "#FF0000", title: "delete" }}
-						style={{ cursor: "pointer" }}
-						onClick={() =>
-							setModalConfig((prev) => ({
-								...prev,
-								isOpen: true,
-								participant: participants[index]._id,
-							}))
-						}
-					/>
-				);
-			});
+		if (allowEditing) {
+			addEditHeadersInTable(head);
+			addEditFieldsInTable(body);
 		}
 
 		const data = { head, body };
@@ -108,9 +104,8 @@ export function ViewParticipants({
 	return (
 		<Wrapper>
 			<Title config={titleConfig}>View Participants</Title>
-			<Subtitle config={titleConfig}>
-				View all participant information.
-			</Subtitle>
+
+			<Subtitle config={titleConfig}>View participants information.</Subtitle>
 
 			{isLoading && <Loading />}
 

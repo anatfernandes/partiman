@@ -3,7 +3,7 @@ import { ViewParticipants } from "../../components/view-participants/ViewPartici
 export function ViewParticipantsPage() {
 	return (
 		<main>
-			<ViewParticipants edit={false} />
+			<ViewParticipants allowEditing={false} />
 		</main>
 	);
 }
