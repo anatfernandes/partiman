@@ -22,7 +22,7 @@ export function Dashboard() {
 			<Modal
 				modalConfig={modalConfig}
 				setModalConfig={setModalConfig}
-				nextCallback={() => deleteParticipant(modalConfig.participant)}
+				nextCallback={() => deleteParticipant.handle(modalConfig.participant)}
 			/>
 
 			<Title config={{ align: "center" }}>Dashboard</Title>
