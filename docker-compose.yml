@@ -1,0 +1,46 @@
+services:
+  mongodb:
+    container_name: partiman-mongodb
+    image: mongo:4.4.6
+    restart: always
+    ports:
+      - 27017:27027
+    env_file:
+      - backend/.env
+
+  backend:
+    build: ./backend
+    container_name: partiman-backend
+    restart: always
+    ports:
+      - 5000:5000
+    env_file:
+      - backend/.env
+    depends_on:
+      - mongodb
+
+  react_app:
+    build: ./frontend
+    container_name: partiman-frontend
+    restart: always
+    env_file:
+      - frontend/.env
+    depends_on:
+      - backend
+    volumes:
+      - react_volume:/var/www/html
+    tty: true
+
+  nginx:
+    build: ./nginx
+    container_name: partiman-nginx
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - react_app
+    volumes:
+      - react_volume:/var/www/html
+
+volumes:
+  react_volume:
