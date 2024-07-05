@@ -1,5 +1,7 @@
 # :bar_chart: Partiman
 
+![Badge Finalizado](https://img.shields.io/static/v1?label=STATUS&message=FINALIZADO&color=success&style=for-the-badge)
+
 Gerenciador de contribuintes de uma organização.
 
 <div align=center>
